@@ -1,0 +1,9 @@
+N:{S,B}
+
+SIGMA:{a,b}
+
+S:S
+
+P:
+    S->aB|bB|EPSILON
+    B->a|bB|aS
