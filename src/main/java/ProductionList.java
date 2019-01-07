@@ -30,23 +30,28 @@ public class ProductionList {
     }
 
 
-    public Optional<Production> getSub(String symbol){
+    public Optional<Production> getSub(String symbol, boolean isTerminal){
 
-        //TODO replace with terminal/non-terminal check
-        if (symbol.equals(symbol.toLowerCase())){
 
+        if (isTerminal){
             for (Production p : productions){
-                for (String s : p.getSymbolsProduced()){
-                    if (s.equals(symbol)){
-                        return Optional.of(p);
-                    }
+                if (p.getCurrent().equals(symbol)){
+                    return Optional.of(p);
                 }
+            }
+
+            //TODO error;
+        }
+
+
+        for (Production produced: productions){
+            if (produced.getSymbol().equals(symbol) && !produced.isVisited){
+                produced.isVisited = true;
+                return Optional.of(produced);
             }
         }
 
-        return productions.stream()
-                .filter(x -> x.getSymbol().equals(symbol))
-                .findFirst();
+        return Optional.empty();
 
     }
 

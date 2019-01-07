@@ -7,6 +7,8 @@ public class LR {
 
     private static Queue<Pair<ProductionList, String>> queue = new ArrayDeque<>();
 
+    private static Grammar grammar;
+
     private static ProductionList closure(ProductionList allProductions, Production elem){
 
 
@@ -26,8 +28,23 @@ public class LR {
 
                 Optional<Production> optionalProduction;
 
+                String currentAtom = closure.getProductions().get(i).getCurrent();
+
+                boolean isTerminal = grammar.isTerminal(currentAtom);
+                boolean isNonTerminal = grammar.isNonTerminal(currentAtom);
+
+                boolean isTerminalFlag = false;
+
+                if (!isTerminal && !isNonTerminal){
+                    //TODO error;
+                }else if(isTerminal && isNonTerminal){
+                    //TODO error;
+                }else {
+                    isTerminalFlag = isTerminal;
+                }
+
                 if (!closure.getProductions().get(i).isDone) {
-                    optionalProduction = allProductions.getSub(closure.getProductions().get(i).getCurrent());
+                    optionalProduction = allProductions.getSub(currentAtom, isTerminalFlag);
                 }else{
                     optionalProduction = Optional.empty();
                 }
@@ -74,7 +91,12 @@ public class LR {
     }
 
 
-    public static List<ProductionList> run(ProductionList productions, Production start) throws Exception {
+    public static List<ProductionList> run(Grammar g) throws Exception {
+
+        grammar = g;
+
+        ProductionList productions = grammar.getProductionList();
+        Production start = grammar.getEnchancedProduction();
 
         List<ProductionList> lrTableData = new ArrayList<>();
 
@@ -84,9 +106,7 @@ public class LR {
 
         System.out.println("s" + state + " " + s0);
 
-
         lrTableData.add(s0);
-
 
         while (!queue.isEmpty()){
 

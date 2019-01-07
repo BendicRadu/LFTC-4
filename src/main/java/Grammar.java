@@ -3,9 +3,7 @@ import org.apache.commons.io.FileUtils;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class Grammar {
 
@@ -13,7 +11,7 @@ public class Grammar {
     private List<String> terminals;
     private List<String> nonTerminals;
     private ProductionList productionList;
-
+    private Production enchancedProduction;
 
     private static String fileContents;
 
@@ -37,9 +35,16 @@ public class Grammar {
 
         if (readFromFile){
             readFromFile();
-        }
-    }
 
+            Production enhanced = new Production();
+            enhanced.setSymbol(getStartingSymbol() + "'");
+            enhanced.setSymbolsProduced(new ArrayList<String>(Collections.singleton(getStartingSymbol())));
+            enhanced.setIndex(0);
+
+            enchancedProduction = enhanced;
+        }
+
+    }
 
     private void readFromFile(){
 
@@ -146,5 +151,21 @@ public class Grammar {
 
     public void setProductionList(ProductionList productionList) {
         this.productionList = productionList;
+    }
+
+    public Production getEnchancedProduction() {
+        return enchancedProduction;
+    }
+
+    public void setEnchancedProduction(Production enchancedProduction) {
+        this.enchancedProduction = enchancedProduction;
+    }
+
+    public static String getFileContents() {
+        return fileContents;
+    }
+
+    public static void setFileContents(String fileContents) {
+        Grammar.fileContents = fileContents;
     }
 }

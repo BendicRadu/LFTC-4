@@ -8,6 +8,7 @@ public class Production {
     private int index = 0;
 
     public boolean isDone;
+    public boolean isVisited;
 
     public String getSymbol() {
         return symbol;
